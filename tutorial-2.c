@@ -24,6 +24,7 @@ int main(int argc, char* argv[])
         if (pArgs == NULL) break;
 
         pValue = PyObject_Call(pFunc, pArgs, NULL);
+	//pValue = PyObject_CallFunction(pFunc, "ii", 22,33);
         if (pValue == NULL) break;
         printf("Result of call: %ld\n", PyLong_AsLong(pValue));
     } while (0);
