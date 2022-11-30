@@ -7,7 +7,7 @@ all: $(EXECUTABLES)
 	@echo Compile tutorials for embedding python
 
 %: %.c
-	@$(CC) `python-config --cflags` $< -o $@ `python-config --ldflags`
+	@$(CC) $< -o $@  `pkg-config --cflags` -lpython3.10
 
 clean:
 	@$(RM) $(EXECUTABLES)
