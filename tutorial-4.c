@@ -4,13 +4,17 @@
 
 int stop_event = 0;
 
-void* run_python_function(void* arg)
-{
-    PyGILState_STATE state = PyGILState_Ensure();
+typedef struct _paras{
+    char* name;    
+} paras;
 
+void* run_python_function(void* arg){
+    paras* data = (paras*)(arg);
+    printf("-->%s\n", data->name);
+    
+    PyGILState_STATE state = PyGILState_Ensure();
     PyObject *pModule = NULL, *pFunc = NULL;
-    do
-    {
+    do{
         pModule = PyImport_ImportModule("work");
         if (pModule == NULL) break;
 
@@ -28,14 +32,15 @@ void* run_python_function(void* arg)
     Py_XDECREF(pModule);
 
     PyGILState_Release(state);
-
     pthread_exit(NULL);
-
+    
     return NULL;
 }
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char* argv[]){
+    paras data;
+    data.name = "alex_test";
+
     //PyEval_InitThreads(); //v3.9 up without it
     Py_Initialize();
     PyObject* sysPath = PySys_GetObject((char*) "path");
@@ -44,10 +49,8 @@ int main(int argc, char* argv[])
     PyThreadState* save = PyEval_SaveThread();
 
     pthread_t tid1, tid2;
-    char* tname1 = "worker1";
-    char* tname2 = "worker2";
-    pthread_create(&tid1, NULL, &run_python_function, &tname1);
-    pthread_create(&tid2, NULL, &run_python_function, &tname2);
+    pthread_create(&tid1, NULL, &run_python_function, &data);
+    pthread_create(&tid2, NULL, &run_python_function, &data);
 
     for (int i = 0; i < 5; i++)
     {
