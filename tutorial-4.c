@@ -36,7 +36,7 @@ void* run_python_function(void* arg)
 
 int main(int argc, char* argv[])
 {
-    //PyEval_InitThreads();
+    //PyEval_InitThreads(); v3.9 up without it
     Py_Initialize();
     PyObject* sysPath = PySys_GetObject((char*) "path");
     PyList_Append(sysPath, PyUnicode_FromString("."));
