@@ -5,7 +5,7 @@
 int stop_event = 0;
 
 typedef struct _paras{
-    char* name;    
+    char name[256];    
 } paras;
 
 void* run_python_function(void* arg){
@@ -39,7 +39,7 @@ void* run_python_function(void* arg){
 
 int main(int argc, char* argv[]){
     paras data;
-    data.name = "alex_test";
+    strcpy(data.name, "alex_test" );
 
     //PyEval_InitThreads(); //v3.9 up without it
     Py_Initialize();
